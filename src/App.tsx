@@ -327,7 +327,7 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter basename="/ffxiv-item-search-tc">
+    <BrowserRouter basename="/ffxiv-item-search-tc-adv">
       <AlarmProvider>
         <PriceCheckListProvider>
           <CraftingListProvider>
