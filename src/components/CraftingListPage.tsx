@@ -6,6 +6,7 @@ import { useCraftingList } from '../contexts/CraftingListContext';
 import { useCraftingListData, type AggregatedMaterial } from '../hooks/useCraftingListData';
 import { getItemById } from '../services/searchService';
 import { getItemIconUrl } from '../services/xivapiService';
+import { CopyButton } from './CopyButton';
 
 // ─── Sub-components ─────────────────────────────────────────────────────────
 
@@ -56,13 +57,16 @@ function MaterialRow({ material, onRecipeChange, onNavigate }: MaterialRowProps)
     <div className="flex items-center gap-2 py-1.5 px-2 rounded hover:bg-[var(--ffxiv-bg-tertiary)]/60 transition-colors">
       <ItemIcon iconId={material.item.icon} name={material.item.name} />
       <div className="flex-1 min-w-0">
-        <button
-          className="text-sm text-[var(--ffxiv-text)] hover:text-[var(--ffxiv-accent)] transition-colors text-left truncate w-full"
-          onClick={() => onNavigate?.(material.item.id)}
-          title={material.item.name}
-        >
-          {material.item.name}
-        </button>
+        <div className="flex items-center gap-0.5">
+          <button
+            className="text-sm text-[var(--ffxiv-text)] hover:text-[var(--ffxiv-accent)] transition-colors text-left truncate flex-1"
+            onClick={() => onNavigate?.(material.item.id)}
+            title={material.item.name}
+          >
+            {material.item.name}
+          </button>
+          <CopyButton text={material.item.name} />
+        </div>
         <RecipeSelector material={material} onRecipeChange={onRecipeChange} />
       </div>
       <span className="flex-shrink-0 text-sm font-medium text-[var(--ffxiv-highlight)]">
