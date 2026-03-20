@@ -11,7 +11,7 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
-  base: '/ffxiv-item-search-tc/',
+  base: '/ffxiv-item-search-tc-adv/',
   build: {
     outDir: 'dist',
     sourcemap: false,
