@@ -7,6 +7,7 @@ import { getMultilingualNames } from '../services/searchService';
 import { prefetchItemDetail } from '../prefetch';
 import { CopyButton } from './CopyButton';
 import { AddToPriceListButton } from './AddToPriceListButton';
+import { AddToCraftingListButton } from './AddToCraftingListButton';
 import { AlarmButton } from './AlarmButton';
 import { getGatheringPointsForItem } from '../hooks/useItemData';
 
@@ -105,6 +106,9 @@ export const ItemCard = memo(function ItemCard({ item, query, onSelect, isSelect
               <span className="px-1.5 py-0.5 bg-[var(--ffxiv-highlight)]/20 text-[var(--ffxiv-highlight)] rounded">HQ</span>
             )}
             <AddToPriceListButton itemId={item.id} variant="small" />
+            {item.isCraftable && (
+              <AddToCraftingListButton itemId={item.id} variant="small" />
+            )}
             {item.isGatherable && (() => {
               const timedPoints = getGatheringPointsForItem(item.id)
                 .filter(p => p.spawns && p.spawns.length > 0 && p.duration);

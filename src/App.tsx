@@ -8,6 +8,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { useItemData } from './hooks/useItemData';
 import { useSearch } from './hooks/useSearch';
 import { PriceCheckListProvider, usePriceCheckList } from './contexts/PriceCheckListContext';
+import { CraftingListProvider, useCraftingList } from './contexts/CraftingListContext';
 import { AlarmProvider, useAlarms } from './contexts/AlarmContext';
 import { EorzeanClock } from './components/EorzeanClock';
 import { DetailNavigationContext } from './contexts/DetailNavigationContext';
@@ -16,6 +17,7 @@ import { ItemDetailContent, ItemDetail } from './components/ItemDetail';
 // Lazy-loaded route components
 const CraftingSimulator = lazy(() => import('./components/crafting').then(m => ({ default: m.CraftingSimulator })));
 const PriceCheckListPage = lazy(() => import('./components/PriceCheckListPage').then(m => ({ default: m.PriceCheckListPage })));
+const CraftingListPage = lazy(() => import('./components/CraftingListPage').then(m => ({ default: m.CraftingListPage })));
 const AlarmsPage = lazy(() => import('./components/AlarmsPage').then(m => ({ default: m.AlarmsPage })));
 
 
@@ -140,6 +142,7 @@ function HomePage() {
 // Header component that uses the price list context
 function Header({ onSettingsOpen }: { onSettingsOpen: () => void }) {
   const { itemCount } = usePriceCheckList();
+  const { itemCount: craftingListCount } = useCraftingList();
   const { alarmCount } = useAlarms();
 
   return (
@@ -186,6 +189,21 @@ function Header({ onSettingsOpen }: { onSettingsOpen: () => void }) {
               {alarmCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-yellow-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                   {alarmCount > 99 ? '99+' : alarmCount}
+                </span>
+              )}
+            </Link>
+            <Link
+              to="/craftinglist"
+              className="relative p-2 text-[var(--ffxiv-muted)] hover:text-emerald-400 hover:bg-emerald-400/10 rounded transition-colors"
+              title="素材統計列表"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              {craftingListCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {craftingListCount > 99 ? '99+' : craftingListCount}
                 </span>
               )}
             </Link>
@@ -250,6 +268,7 @@ function AppContent() {
               <Route path="/item/:id" element={<div className="max-w-6xl mx-auto"><ItemDetail /></div>} />
               <Route path="/craft/:itemId" element={<div className="max-w-6xl mx-auto"><CraftingSimulator /></div>} />
               <Route path="/pricelist" element={<div className="max-w-6xl mx-auto"><PriceCheckListPage /></div>} />
+              <Route path="/craftinglist" element={<CraftingListPage />} />
               <Route path="/alarms" element={<div className="max-w-6xl mx-auto"><AlarmsPage /></div>} />
             </Routes>
           </Suspense>
@@ -311,7 +330,9 @@ function App() {
     <BrowserRouter basename="/ffxiv-item-search-tc">
       <AlarmProvider>
         <PriceCheckListProvider>
-          <AppContent />
+          <CraftingListProvider>
+            <AppContent />
+          </CraftingListProvider>
         </PriceCheckListProvider>
       </AlarmProvider>
     </BrowserRouter>
